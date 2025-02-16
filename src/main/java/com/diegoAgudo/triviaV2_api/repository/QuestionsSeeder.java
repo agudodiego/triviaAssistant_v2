@@ -3,12 +3,9 @@ package com.diegoAgudo.triviaV2_api.repository;
 import com.diegoAgudo.triviaV2_api.model.Question;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +21,7 @@ public class QuestionsSeeder {
     @Autowired
     QuestionRepo questionRepo;
 
-    @PostConstruct
-    public void seed() {
+    public String seed() {
         logger.info("Inicio - seed");
         try {
             if(questionRepo.count() == 0){
@@ -34,10 +30,13 @@ public class QuestionsSeeder {
                 logger.info("El seeder se termino de ejecutar");
             }else{
                 logger.info("El seeder NO se ejecutara");
+                return "El seeder NO se ejecutara";
             }
             logger.info("fin - seed");
+            return "Tabla cargada";
         } catch (IOException e){
             logger.info("problema de conexion con BD");
+            return "No se pudo cargar la tabla";
         }
     }
 
@@ -47,8 +46,11 @@ public class QuestionsSeeder {
         ClassPathResource resource = new ClassPathResource("base-preguntas.json");
         ObjectMapper objectMapper = new ObjectMapper();
 
+        // Leer el archivo como un InputStream (funciona tanto en JAR como en desarrollo)
+        InputStream inputStream = resource.getInputStream();
+
         // Convertir JSON a lista de objetos Question
-        List<Question> questions = objectMapper.readValue(resource.getFile(), new TypeReference<List<Question>>(){});
+        List<Question> questions = objectMapper.readValue(inputStream, new TypeReference<List<Question>>(){});
 
         // Insertar las preguntas en la base de datos
         questionRepo.saveAll(questions);

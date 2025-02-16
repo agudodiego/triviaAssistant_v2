@@ -2,6 +2,7 @@ package com.diegoAgudo.triviaV2_api.controller;
 
 import com.diegoAgudo.triviaV2_api.exceptions.ErrorProcessException;
 import com.diegoAgudo.triviaV2_api.model.Question;
+import com.diegoAgudo.triviaV2_api.repository.QuestionsSeeder;
 import com.diegoAgudo.triviaV2_api.service.QuestionsService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,13 @@ public class QuestionsController {
 
     @Autowired
     private QuestionsService questionsService;
+    @Autowired
+    private QuestionsSeeder questionsSeeder;
+
+    @GetMapping("/seed")
+    public ResponseEntity<String> startSeeding() throws ErrorProcessException {
+        return ResponseEntity.status(HttpStatus.OK).body(questionsSeeder.seed());
+    }
 
     @GetMapping("/public")
     public ResponseEntity<Question> getOneQuestionRandomly() throws ErrorProcessException {

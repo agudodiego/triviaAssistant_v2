@@ -18,19 +18,12 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "question_id")
     private Integer questionId;
-    @Column(name = "categoria", nullable = false)
     private String categoria;
-    @Column(name = "pregunta", nullable = false)
     private String pregunta;
-    @Column(name = "respuesta", nullable = false)
     private String respuesta;
-    @Column(name = "incorrecta1", nullable = false)
     private String incorrecta1;
-    @Column(name = "incorrecta2", nullable = false)
     private String incorrecta2;
-    @Column(name = "incorrecta3", nullable = false)
     private String incorrecta3;
-    @Column(name = "imagen")
     private String imagen;
 
 }
