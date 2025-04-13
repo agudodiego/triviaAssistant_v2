@@ -32,7 +32,7 @@ public class BasicAuthConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(authorizerequest ->
-                authorizerequest.requestMatchers("/API/public").permitAll()
+                authorizerequest.requestMatchers("/apiTrivia/public").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
