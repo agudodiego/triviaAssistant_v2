@@ -4,13 +4,17 @@ FROM openjdk:17
 # Establece el directorio de trabajo en /app
 WORKDIR /app
 
-# Copia el archivo JAR de la aplicación al contenedor
+# Copia el archivo JAR y el script wait-for-it.sh
 COPY target/triviaV2_api-0.0.1-SNAPSHOT.jar triviaV2_backend.jar
+COPY wait-for-it.sh wait-for-it.sh
+
+# Da permisos de ejecución al script
+RUN chmod +x wait-for-it.sh
 
 # Las variables de entorno las paso en con el comando RUN o a traves del docker-compose.yml
 
 # Expone el puerto especificado
 EXPOSE 8080
 
-# Comando para ejecutar la aplicación
-CMD ["java", "-jar", "triviaV2_backend.jar"]
+# Usa wait-for-it para esperar a MySQL (reemplaza host y puerto según tu setup)
+CMD ["./wait-for-it.sh", "mysql:3306", "--", "java", "-jar", "triviaV2_backend.jar"]
